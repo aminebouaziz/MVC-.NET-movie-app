@@ -6,6 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="ac33387dfdf048e09e2b823bf90b56d2" Name="Diagram1">
         <EntityTypeShape EntityType="CinemaModel.Producer" Width="2.875" PointX="1.25" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaModel.Movie" Width="1.5" PointX="6.125" PointY="0.625" />
+        <AssociationConnector Association="CinemaModel.FK_Movie_ToTable" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

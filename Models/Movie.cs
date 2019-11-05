@@ -12,20 +12,14 @@ namespace CinemaManager.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Producer
+    public partial class Movie
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Producer()
-        {
-            this.Movie = new HashSet<Movie>();
-        }
-    
         public int Id { get; set; }
-        public string name_ { get; set; }
-        public string nationality { get; set; }
-        public string email { get; set; }
+        public string title { get; set; }
+        public System.DateTime releaseDate { get; set; }
+        public string genre { get; set; }
+        public int producerId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Movie> Movie { get; set; }
+        public virtual Producer Producer { get; set; }
     }
 }

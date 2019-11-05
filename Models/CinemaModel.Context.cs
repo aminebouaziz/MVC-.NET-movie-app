@@ -26,5 +26,6 @@ namespace CinemaManager.Models
         }
     
         public virtual DbSet<Producer> Producer { get; set; }
+        public virtual DbSet<Movie> Movie { get; set; }
     }
 }

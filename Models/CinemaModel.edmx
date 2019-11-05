@@ -4,7 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CinemaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CinemaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="releaseDate" Type="datetime" Nullable="false" />
+          <Property Name="genre" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="producerId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Producer">
           <Key>
             <PropertyRef Name="Id" />
@@ -14,11 +24,27 @@
           <Property Name="nationality" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="email" Type="nvarchar" MaxLength="30" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Movie_ToTable">
+          <End Role="Producer" Type="Self.Producer" Multiplicity="1" />
+          <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Movie">
+              <PropertyRef Name="producerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CinemaModelStoreContainer">
+          <EntitySet Name="Movie" EntityType="Self.Movie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producer" EntityType="Self.Producer" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Movie_ToTable" Association="Self.FK_Movie_ToTable">
+            <End Role="Producer" EntitySet="Producer" />
+            <End Role="Movie" EntitySet="Movie" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CinemaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -30,10 +56,39 @@
           <Property Name="name_" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="nationality" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Movie" Relationship="CinemaModel.FK_Movie_ToTable" FromRole="Producer" ToRole="Movie" />
         </EntityType>
         <EntityContainer Name="CinemaEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Producer" EntityType="Self.Producer" />
+          <EntitySet Name="Movie" EntityType="CinemaModel.Movie" />
+          <AssociationSet Name="FK_Movie_ToTable" Association="CinemaModel.FK_Movie_ToTable">
+            <End Role="Producer" EntitySet="Producer" />
+            <End Role="Movie" EntitySet="Movie" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="releaseDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="genre" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="producerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Producer" Relationship="CinemaModel.FK_Movie_ToTable" FromRole="Movie" ToRole="Producer" />
+        </EntityType>
+        <Association Name="FK_Movie_ToTable">
+          <End Type="CinemaModel.Producer" Role="Producer" Multiplicity="1" />
+          <End Type="CinemaModel.Movie" Role="Movie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Movie">
+              <PropertyRef Name="producerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -47,6 +102,17 @@
                 <ScalarProperty Name="name_" ColumnName="name " />
                 <ScalarProperty Name="nationality" ColumnName="nationality" />
                 <ScalarProperty Name="email" ColumnName="email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Movie">
+            <EntityTypeMapping TypeName="CinemaModel.Movie">
+              <MappingFragment StoreEntitySet="Movie">
+                <ScalarProperty Name="producerId" ColumnName="producerId" />
+                <ScalarProperty Name="genre" ColumnName="genre" />
+                <ScalarProperty Name="releaseDate" ColumnName="releaseDate" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
