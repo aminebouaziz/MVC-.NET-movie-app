@@ -13,7 +13,22 @@ namespace CinemaManager.Controllers
     {
         CinemaEntities ce = new CinemaEntities();
 
-
+        public ActionResult ProdsAndTheirMovies_UsingModel(int id)
+        {
+            var list = from p in ce.Producer
+                       join m in  ce.Movie
+                       on p.Id equals m.producerId
+                       where p.Id == id
+                       select new ProdMovie
+                       {
+                   
+                           pName = p.name_,
+                           pNat = p.nationality,
+                            mTitle = m.title,
+                           mGenre = m.genre
+                       };
+            return View(list);
+        }
         public ActionResult ProdsAndTheirMovies()
         {
             var list = ce.Producer.ToList();

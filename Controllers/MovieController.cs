@@ -14,7 +14,49 @@ namespace CinemaManager.Controllers
     {
         private CinemaEntities db = new CinemaEntities();
         
-        
+        public ActionResult SearchByTitle(string id)
+        {
+            var list = from m in db.Movie
+                       where m.title == id
+                       select m;
+            return View(list);
+        }
+
+        public ActionResult SearchByGenre(string id)
+        {
+            var list = from m in db.Movie
+                       where m.genre == id
+                       select m;
+            return View(list);
+        }
+
+
+        public ActionResult SearchBy2(string id , string genre)
+        {
+
+            var genreMovie = (from g in db.Movie
+                              select g.genre).Distinct();
+            var list = from m in db.Movie
+                       where m.title == id && m.genre == genre
+                       select m;
+            ViewBag.genre = new SelectList(genreMovie);
+
+            return View(list);
+        }
+        public ActionResult MoviesAndTheirProds_UsingModel()
+        {
+            var list = from m in db.Movie
+                       join p in db.Producer
+                       on m.producerId equals p.Id
+                       select new ProdMovie
+                       {
+                           mTitle = m.title,
+                           mGenre = m.genre,
+                           pName = p.name_,
+                           pNat = p.nationality
+                       };
+            return View(list);
+        }
         public ActionResult MovieAndTheirProds()
         {
         

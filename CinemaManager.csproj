@@ -152,6 +152,7 @@
     <Compile Include="Models\Movie.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProdMovie.cs" />
     <Compile Include="Models\Producer.cs">
       <DependentUpon>CinemaModel.tt</DependentUpon>
     </Compile>
@@ -226,6 +227,11 @@
     <Content Include="Views\Movie\Index.cshtml" />
     <Content Include="Views\Movie\MovieAndTheirProds.cshtml" />
     <Content Include="Views\Producer\ProdsAndTheirMovies.cshtml" />
+    <Content Include="Views\Movie\MoviesAndTheirProds_UsingModel.cshtml" />
+    <Content Include="Views\Producer\ProdsAndTheirMovies_UsingModel.cshtml" />
+    <Content Include="Views\Movie\SearchByTitle.cshtml" />
+    <Content Include="Views\Movie\SearchByGenre.cshtml" />
+    <Content Include="Views\Movie\SearchBy2.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
