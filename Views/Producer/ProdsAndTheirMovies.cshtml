@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CinemaManager.Models.Producer>
+
+@{
+    ViewBag.Title = "ProdsAndTheirMovies";
+}
+
+<h2>ProdsAndTheirMovies</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name_)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nationality)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Movie)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.name_)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.nationality)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.email)
+    </td>
+    <td>
+        @foreach (var movie in item.Movie)
+        {
+            <ul>
+                <li>
+                    @Html.DisplayFor(modelItem => movie.title    ) 
+                </li>
+            </ul>
+        }
+        </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+    </td>
+</tr>
+}
+
+</table>

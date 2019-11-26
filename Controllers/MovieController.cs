@@ -1,95 +1,139 @@
-﻿using CinemaManager.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using CinemaManager.Models;
 
 namespace CinemaManager.Controllers
 {
     public class MovieController : Controller
     {
-        CinemaEntities ce = new CinemaEntities();
+        private CinemaEntities db = new CinemaEntities();
+        
+        
+        public ActionResult MovieAndTheirProds()
+        {
+        
+            return View(db.Movie.ToList());
+        }
+
         // GET: Movie
         public ActionResult Index()
         {
-
-            var list = ce.Movie.ToList();
-            return View(list);
+            var movie = db.Movie.Include(m => m.Producer);
+            return View(movie.ToList());
         }
 
         // GET: Movie/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-           
-            return View(ce.Movie.Find(id));
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Movie movie = db.Movie.Find(id);
+            if (movie == null)
+            {
+                return HttpNotFound();
+            }
+            return View(movie);
         }
 
         // GET: Movie/Create
         public ActionResult Create()
         {
+            ViewBag.producerId = new SelectList(db.Producer, "Id", "name_");
             return View();
         }
 
         // POST: Movie/Create
+        // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
+        // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create(Movie m)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,title,releaseDate,genre,producerId")] Movie movie)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                ce.Movie.Add(m);
-                ce.SaveChanges();
+                db.Movie.Add(movie);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            ViewBag.producerId = new SelectList(db.Producer, "Id", "name_", movie.producerId);
+            return View(movie);
         }
 
         // GET: Movie/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Movie movie = db.Movie.Find(id);
+            if (movie == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.producerId = new SelectList(db.Producer, "Id", "name_", movie.producerId);
+            return View(movie);
         }
 
         // POST: Movie/Edit/5
+        // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
+        // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,title,releaseDate,genre,producerId")] Movie movie)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
+                db.Entry(movie).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.producerId = new SelectList(db.Producer, "Id", "name_", movie.producerId);
+            return View(movie);
         }
 
         // GET: Movie/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Movie movie = db.Movie.Find(id);
+            if (movie == null)
+            {
+                return HttpNotFound();
+            }
+            return View(movie);
         }
 
         // POST: Movie/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            Movie movie = db.Movie.Find(id);
+            db.Movie.Remove(movie);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
-                return RedirectToAction("Index");
-            }
-            catch
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                return View();
+                db.Dispose();
             }
+            base.Dispose(disposing);
         }
     }
 }

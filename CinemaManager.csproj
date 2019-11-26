@@ -219,9 +219,13 @@
     <Content Include="Views\Producer\Edit.cshtml" />
     <Content Include="Views\Producer\Delete.cshtml" />
     <Content Include="Views\Producer\Details.cshtml" />
-    <Content Include="Views\Movie\Index.cshtml" />
-    <Content Include="Views\Movie\Details.cshtml" />
     <Content Include="Views\Movie\Create.cshtml" />
+    <Content Include="Views\Movie\Delete.cshtml" />
+    <Content Include="Views\Movie\Details.cshtml" />
+    <Content Include="Views\Movie\Edit.cshtml" />
+    <Content Include="Views\Movie\Index.cshtml" />
+    <Content Include="Views\Movie\MovieAndTheirProds.cshtml" />
+    <Content Include="Views\Producer\ProdsAndTheirMovies.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

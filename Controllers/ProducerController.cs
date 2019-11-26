@@ -12,6 +12,14 @@ namespace CinemaManager.Controllers
     public class ProducerController : Controller
     {
         CinemaEntities ce = new CinemaEntities();
+
+
+        public ActionResult ProdsAndTheirMovies()
+        {
+            var list = ce.Producer.ToList();
+
+            return View(list);
+        }
         // GET: Producer
         public ActionResult Index()
         {
