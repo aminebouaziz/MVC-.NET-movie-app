@@ -31,13 +31,13 @@ namespace CinemaManager.Controllers
         }
 
 
-        public ActionResult SearchBy2(string id , string genre)
+        public ActionResult SearchBy2(string id ="" , string genre="")
         {
 
             var genreMovie = (from g in db.Movie
                               select g.genre).Distinct();
             var list = from m in db.Movie
-                       where m.title == id && m.genre == genre
+                       where m.title.Contains(id)  && m.genre.Contains(genre)
                        select m;
             ViewBag.genre = new SelectList(genreMovie);
 
